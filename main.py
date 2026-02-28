@@ -4,12 +4,10 @@ import os
 
 app = Flask(__name__)
 
-# ---------------- Home Route ----------------
 @app.route("/")
 def home():
     return render_template("chat.html")
 
-# ---------------- Chat Route ----------------
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -29,7 +27,6 @@ def chat():
 
     return jsonify({"reply": reply})
 
-# ---------------- Run Flask ----------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)

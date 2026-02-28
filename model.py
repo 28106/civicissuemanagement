@@ -1,11 +1,5 @@
-# model.py
-
 def predict_category(text):
-    """
-    Simple keyword-based complaint categorization
-    """
     text = text.lower()
-
     if any(word in text for word in ["garbage", "trash", "waste"]):
         return "Garbage"
     elif any(word in text for word in ["pothole", "road damage", "road"]):
