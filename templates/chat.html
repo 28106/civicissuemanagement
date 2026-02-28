@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Civic Chatbot</title>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        #chatbox {
+            height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .user-msg {
+            text-align: right;
+            margin: 10px;
+            color: blue;
+        }
+
+        .bot-msg {
+            text-align: left;
+            margin: 10px;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+
+    <h3 class="text-center mb-4">AI Civic Complaint Chatbot 🤖</h3>
+
+    <div id="chatbox" class="mb-3"></div>
+
+    <input type="text" id="username" class="form-control mb-2" placeholder="Enter your name">
+
+    <input type="text" id="location" class="form-control mb-2" placeholder="Enter your location">
+
+    <div class="input-group">
+        <input type="text" id="message" class="form-control" placeholder="Describe your issue">
+        <button type="button" class="btn btn-primary" onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+function sendMessage() {
+
+    let name = document.getElementById("username").value;
+    let location = document.getElementById("location").value;
+    let message = document.getElementById("message").value;
+
+    if (name === "" || location === "" || message === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    let chatbox = document.getElementById("chatbox");
+
+    // Show user message
+    chatbox.innerHTML += "<div class='user-msg'><b>" + name + ":</b> " + message + "</div>";
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            location: location,
+            message: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        chatbox.innerHTML += "<div class='bot-msg'><b>Bot:</b> " + data.reply + "</div>";
+        chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    document.getElementById("message").value = "";
+}
+</script>
+
+</body>
+</html>
